@@ -1,0 +1,14 @@
+{
+  "version": "0.2.0-preview.4",
+  "platform": "darwin-arm64",
+  "hapi": {
+    "package": "@twsxtd/hapi-darwin-arm64",
+    "version": "0.30.7",
+    "integrity": "sha512-liXzQiIdNrEobPqlVRmbdIcN8r7W9e/7Vcc5gO34keJwzr6PZ4JZO4BM2PnNuw57WD2EeXb4aBR5PSOFhYi6Xw==",
+    "registry": "https://registry.npmjs.org"
+  },
+  "tunnel": {
+    "url": "https://moecast.aixagent.cloud/connect/tunwg-darwin-arm64-0.2.0-preview.4.bin",
+    "sha256": "6e5fa5f287f7d30d4e93b8a525442650596a98bfa850cc4033dffb3e5567f00d"
+  }
+}

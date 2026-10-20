@@ -1,0 +1,4 @@
+interface:
+  display_name: "MoeCast Connect"
+  short_description: "Install, connect and repair MoeCast phone access to Codex"
+  default_prompt: "Use $moecast-connect to connect my phone to this computer or repair an existing connection."

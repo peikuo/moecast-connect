@@ -1,0 +1,93 @@
+[
+  {
+    "module": "github.com/inetaf/tcpproxy",
+    "version": "v0.0.0-20260515195445-c159a6051109",
+    "files": [
+      "github.com_inetaf_tcpproxy-LICENSE"
+    ]
+  },
+  {
+    "module": "github.com/armon/go-proxyproto",
+    "version": "v0.1.0",
+    "files": [
+      "github.com_armon_go-proxyproto-LICENSE"
+    ]
+  },
+  {
+    "module": "golang.org/x/crypto",
+    "version": "v0.51.0",
+    "files": [
+      "golang.org_x_crypto-LICENSE"
+    ]
+  },
+  {
+    "module": "golang.org/x/text",
+    "version": "v0.37.0",
+    "files": [
+      "golang.org_x_text-LICENSE"
+    ]
+  },
+  {
+    "module": "golang.org/x/net",
+    "version": "v0.54.0",
+    "files": [
+      "golang.org_x_net-LICENSE"
+    ]
+  },
+  {
+    "module": "golang.org/x/sys",
+    "version": "v0.44.0",
+    "files": [
+      "golang.org_x_sys-LICENSE"
+    ]
+  },
+  {
+    "module": "golang.zx2c4.com/wireguard",
+    "version": "v0.0.0-20250521234502-f333402bd9cb",
+    "files": [
+      "golang.zx2c4.com_wireguard-LICENSE"
+    ]
+  },
+  {
+    "module": "golang.org/x/time",
+    "version": "v0.15.0",
+    "files": [
+      "golang.org_x_time-LICENSE"
+    ]
+  },
+  {
+    "module": "gvisor.dev/gvisor",
+    "version": "v0.0.0-20260515164445-2a56b9b52bc3",
+    "files": [
+      "gvisor.dev_gvisor-LICENSE"
+    ]
+  },
+  {
+    "module": "golang.org/x/exp",
+    "version": "v0.0.0-20231110203233-9a3e6036ecaa",
+    "files": [
+      "golang.org_x_exp-LICENSE"
+    ]
+  },
+  {
+    "module": "github.com/google/btree",
+    "version": "v1.1.3",
+    "files": [
+      "github.com_google_btree-LICENSE"
+    ]
+  },
+  {
+    "module": "golang.zx2c4.com/wireguard/wgctrl",
+    "version": "v0.0.0-20241231184526-a9ab2273dd10",
+    "files": [
+      "golang.zx2c4.com_wireguard_wgctrl-LICENSE.md"
+    ]
+  },
+  {
+    "module": "Go standard library",
+    "version": "go version go1.27.3 darwin/arm64",
+    "files": [
+      "Go-LICENSE"
+    ]
+  }
+]

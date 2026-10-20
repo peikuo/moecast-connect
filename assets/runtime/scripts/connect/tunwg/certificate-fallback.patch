@@ -1,0 +1,95 @@
+--- a/internal/tls.go
++++ b/internal/tls.go
+@@ -21,6 +21,7 @@
+ 	"path/filepath"
+ 	"strings"
+ 	"sync"
++	"sync/atomic"
+ 	"time"
+ 
+ 	"golang.org/x/crypto/acme"
+@@ -53,7 +54,14 @@
+ }
+ 
+ func GetTLSConfig() *tls.Config {
++	var limitedUntil atomic.Int64
+ 	le := &autocert.Manager{
++		Client: &acme.Client{RetryBackoff: func(n int, r *http.Request, res *http.Response) time.Duration {
++			if res.StatusCode == http.StatusTooManyRequests {
++				limitedUntil.Store(time.Now().Add(issuerCooldown(res, time.Now())).UnixNano())
++			}
++			return certificateBackoff(n, r, res)
++		}},
+ 		Prompt:     autocert.AcceptTOS,
+ 		Email:      SSLCertificateEmail(),
+ 		Cache:      autocert.DirCache(filepath.Join(Keystorage(), "certs")),
+@@ -66,10 +74,12 @@
+ 			if TestOnlyRunLocalhost() {
+ 				return localhostCertificate()
+ 			}
+-			if cert, err := le.GetCertificate(hello); err == nil {
+-				return cert, nil
+-			} else {
+-				slog.Warn("error getting cert from lets encrypt", "err", err)
++			if time.Now().UnixNano() >= limitedUntil.Load() {
++				if cert, err := le.GetCertificate(hello); err == nil {
++					return cert, nil
++				} else {
++					slog.Warn("error getting cert from lets encrypt", "err", err)
++				}
+ 			}
+ 			zsMu.Lock()
+ 			defer zsMu.Unlock()
+@@ -81,6 +91,7 @@
+ 				zs = &autocert.Manager{
+ 					Client: &acme.Client{
+ 						DirectoryURL: "https://acme.zerossl.com/v2/DV90",
++						RetryBackoff: certificateBackoff,
+ 					},
+ 					Prompt:                 autocert.AcceptTOS,
+ 					Email:                  SSLCertificateEmail(),
+@@ -138,7 +149,7 @@
+ 	if !result.Success {
+ 		return nil, fmt.Errorf("failed zerossl eab: %v", string(respBytes))
+ 	}
+-	slog.Info("fetched zerossl credentials", "eab_kid", result.EABKID)
++	slog.Info("fetched zerossl credentials")
+ 	res := &acme.ExternalAccountBinding{
+ 		KID: result.EABKID,
+ 	}
+@@ -177,3 +188,35 @@
+ 	certificate, err := tls.X509KeyPair(certPEM, keyPEM)
+ 	return &certificate, err
+ }
++
++// A rate limit must reach the existing alternate issuer instead of sleeping
++// through its Retry-After for hours. Never retry the limited issuer here.
++func certificateBackoff(n int, _ *http.Request, res *http.Response) time.Duration {
++	if res.StatusCode == http.StatusTooManyRequests || n >= 3 {
++		return 0
++	}
++	if value := res.Header.Get("Retry-After"); value != "" {
++		delay := time.Duration(0)
++		if seconds, err := time.ParseDuration(value + "s"); err == nil {
++			delay = seconds
++		} else if when, err := http.ParseTime(value); err == nil {
++			delay = time.Until(when)
++		}
++		if delay <= 0 || delay > 10*time.Second {
++			return 0
++		}
++		return delay
++	}
++	return time.Duration(n) * time.Second
++}
++
++func issuerCooldown(res *http.Response, now time.Time) time.Duration {
++	value := res.Header.Get("Retry-After")
++	if seconds, err := time.ParseDuration(value + "s"); err == nil && seconds > 0 {
++		return seconds
++	}
++	if when, err := http.ParseTime(value); err == nil && when.After(now) {
++		return when.Sub(now)
++	}
++	return time.Minute
++}

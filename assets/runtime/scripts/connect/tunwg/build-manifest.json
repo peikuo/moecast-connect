@@ -1,0 +1,11 @@
+{
+  "upstream": "https://github.com/tiann/tunwg",
+  "revision": "122a6d0e43585bed8782ceb893394104b6640589",
+  "sourceUrl": "https://codeload.github.com/tiann/tunwg/tar.gz/122a6d0e43585bed8782ceb893394104b6640589",
+  "sourceSha256": "683bab2b270afa6c88d087d3250a78635fc650d71bfdedf9372739ba946d91af",
+  "patchSha256": "aeacaf5027895cde3e8cbf6557d449466b207a8a5e0e820f701426b2f58a9105",
+  "binarySha256": "6e5fa5f287f7d30d4e93b8a525442650596a98bfa850cc4033dffb3e5567f00d",
+  "goVersion": "go version go1.27.3 darwin/arm64",
+  "platform": "darwin-arm64",
+  "change": "Bound ACME retries so explicit rate limits reach the existing alternate issuer; omit EAB credential identifier from logs."
+}

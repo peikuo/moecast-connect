@@ -1,0 +1,12 @@
+MoeCast Connect — connection Skill preview.
+
+The HAPI binary is not redistributed here. Installation retrieves its pinned npm
+package with an integrity check. HAPI retains its own upstream license.
+
+The modified tunwg binary is built from tiann/tunwg revision
+122a6d0e43585bed8782ceb893394104b6640589. The narrow ACME retry/fallback patch,
+build provenance, upstream MIT license and linked dependency license notices are
+included under assets/runtime/scripts/connect/tunwg/.
+
+No MoeCast app source, account state, pairing credentials, model weights, or chat
+history is included in this standalone Skill distribution.
