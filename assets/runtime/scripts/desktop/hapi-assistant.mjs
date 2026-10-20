@@ -4,9 +4,9 @@ export function parseAssistantDecision(raw,catalog,projects,{user,focusId}={}){
  let d;try{d=JSON.parse(raw);}catch{throw fault('ASSISTANT_INVALID_OUTPUT',502);}
  // Missing project is resolved by authorization, never by an inferred filesystem path.
  if(d?.intent==='new_thread'&&d.project===null){if(projects.length===1)d.project=projects[0];else d.ambiguous=true;}
- if(d?.intent==='open'&&d.ambiguous&&catalog.some(t=>t.id===focusId)&&typeof user==='string'){
+ if(d&&catalog.some(t=>t.id===focusId)&&typeof user==='string'){
   const compact=user.replace(/[\s，,。.!！]/g,'');
-  if(/^(重新连接)?(恢复|接回|继续)(之前|刚才|原来|当前|这个|原来的)的?(聊天|会话|对话)((不要|别)(新开|新建|另开)(聊天|会话)?)?$/.test(compact)){d.targetIds=[focusId];d.ambiguous=false;}
+  if(/^(重新连接)?(恢复|接回|继续)(之前|刚才|原来|当前|这个|原来的)的?(聊天|会话|对话)((不要|别)(新开|新建|另开)(聊天|会话)?)?$/.test(compact)){d.intent='open';d.targetIds=[focusId];d.ambiguous=false;d.project=null;d.alias=null;d.reply='';}
  }
  const ids=new Set(catalog.map(t=>t.id));
  if(!d||!['status','history','dispatch','open','new_thread','alias','none'].includes(d.intent)||typeof d.ambiguous!=='boolean'||!Array.isArray(d.targetIds)||d.targetIds.some(id=>!ids.has(id))||new Set(d.targetIds).size!==d.targetIds.length||d.project!==null&&!projects.includes(d.project)||d.alias!==null&&(typeof d.alias!=='string'||!d.alias.trim()||d.alias.length>80)||typeof d.reply!=='string'||d.reply.length>2000)throw fault('ASSISTANT_INVALID_OUTPUT',502);
@@ -29,7 +29,7 @@ export class DeviceAssistant {
  preferences(id){return this.store.require(id).assistant??{model:null,focusId:null,aliases:{},conversation:[]};}
  async savePreferences(id,patch){return this.store.transaction(async()=>{const d=this.store.require(id);d.assistant={...this.preferences(id),...patch};await this.store.save();return structuredClone(d.assistant);});}
  async models(){if(!this.catalogPromise)this.catalogPromise=this.model.models().finally(()=>{this.catalogPromise=null});return this.catalogPromise;}
- async configuration(id){const p=this.preferences(id),models=await this.models();return{model:p.model,suggestedModel:models.some(m=>m.id==='gpt-6-luna')?'gpt-6-luna':null,selectionRequired:!p.model,models,focusId:p.focusId,scope:'frontdesk_only',workModelsUnchanged:true};}
+ async configuration(id){const p=this.preferences(id),models=await this.models();return{model:p.model,suggestedModel:models.some(m=>m.id==='gpt-6-luna')?'gpt-6-luna':null,selectionRequired:!p.model||!models.some(m=>m.id===p.model),models,focusId:p.focusId,scope:'frontdesk_only',workModelsUnchanged:true};}
  async configure(id,model){if(typeof model!=='string'||!(await this.models()).some(m=>m.id===model))throw fault('MODEL_NOT_AVAILABLE');await this.savePreferences(id,{model});return this.configuration(id);}
  async catalog(id){const device=this.store.require(id),p=this.preferences(id);const rows=await this.directory.list(device);return rows.map(t=>({...t,aliases:p.aliases?.[t.id]??[]}));}
  request(id,requestId){return this.store.data.assistantRequests?.[id+':'+requestId];}
@@ -39,7 +39,7 @@ export class DeviceAssistant {
   if(typeof text!=='string'||!text.trim()||text.length>8000||typeof requestId!=='string'||!/^[-a-zA-Z0-9_]{1,100}$/.test(requestId)||focusId!==undefined&&!isId(focusId))throw fault('INVALID_ASSISTANT_REQUEST');
   const hash=digest(JSON.stringify([text,focusId??null])),prior=this.request(id,requestId);
   if(prior){if(prior.digest!==hash)throw fault('REQUEST_ID_CONFLICT',409);return this.publicRequest(prior,requestId);}
-  const p=this.preferences(id);if(!p.model)return{kind:'model_selection_required',...(await this.configuration(id))};
+  const p=this.preferences(id),configuration=await this.configuration(id);if(configuration.selectionRequired)return{kind:'model_selection_required',...configuration};
   const catalog=await this.catalog(id),device=this.store.require(id),projects=device.grants.projects;
   const focus=focusId??p.focusId;const safeFocus=catalog.some(t=>t.id===focus)?focus:null;
   const answer=await this.model.infer({user:text,catalog:catalog.map(({id,label,project,projectName,summary,state,aliases})=>({id,label,project,projectName,summary,state,aliases})),projects,focusId:safeFocus,conversation:(p.conversation??[]).slice(-4)},p.model);

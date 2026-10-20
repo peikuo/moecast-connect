@@ -11,7 +11,7 @@
     "scripts/desktop/hapi-targets.mjs": "b0f1fad489ba7b25bfe8eeedf7676085f7e9773a19c3672f9e14949f17f76801",
     "scripts/desktop/hapi-executors.mjs": "2a762ed5c27f52719b6f7def91bc5cd7c644ee8472b70c23acefe1248d51c2c8",
     "scripts/desktop/hapi-ports.mjs": "e158a70c4bcfc27bd79f77072ba66178b91e39ef1952d4b8f3551f87b49f73db",
-    "scripts/desktop/hapi-assistant.mjs": "f6429d0768e3053837a26f9e5db8f5fdb4441136d318210495132945a9c96e50",
+    "scripts/desktop/hapi-assistant.mjs": "39188bc0d0f8b964042c8658c3915705367dde11734f1e75046e050fce67a51c",
     "scripts/desktop/hapi-assistant-model.mjs": "aa07131ff5dddd1c6a89e96859a79325cb9ff8fb5157f415beb1f4092d8d4e09",
     "scripts/connect/tunwg/tunwg": "6e5fa5f287f7d30d4e93b8a525442650596a98bfa850cc4033dffb3e5567f00d",
     "scripts/connect/tunwg/LICENSE": "d8ac11fb1304443975a04293266bc30227d0dbf01a44f9d51d9ece096aadbe36",
