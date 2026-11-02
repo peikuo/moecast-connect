@@ -1,9 +1,0 @@
-{
-  "name": "moecast-connect-runtime",
-  "version": "0.2.0-preview.5",
-  "private": true,
-  "dependencies": {
-    "qrcode": "1.5.4",
-    "ws": "8.22.0"
-  }
-}
