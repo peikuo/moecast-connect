@@ -24,6 +24,8 @@ npx skills add peikuo/moecast-connect --skill moecast-codex-connect --agent code
 
 Skill 会自动检测系统和 CPU 架构，选择对应安装组件，用户无需选择平台、分支或二进制。目前提供 Mac Apple Silicon 预览和 Windows x64 测试候选。两者都需要 Node.js 22+、已登录且正在运行的本机 Codex 桌面 App。Windows 请在原生 PowerShell 环境操作，不能使用网页版聊天或 WSL 代替本机入口。CLI 登录本身不足以建立原生桌面连接；Windows 原生聊天唤起、手机配对和附件仍需实机验收，不能沿用 Mac 成绩。详见 [Windows 测试步骤](skills/moecast-codex-connect/references/windows.md)。
 
+用户已报告一台 Windows 机器调试成功。配对、原生工具加载和实际调用应分别记录；该机器的插件注册临时修复见 [Windows 本机排障案例](skills/moecast-codex-connect/references/windows.md#windows-local-case-native-plugin-registration)，不能推广为所有机器的安装步骤。
+
 连接器负责配对、消息、实时回复和附件传输；任务由已有桌面 Codex 聊天以其自身设置执行。当前路径不安装或启动 HAPI Hub／Runner，不新增执行器，不更改桌面模型或权限。具体操作见 [Codex Skill](skills/moecast-codex-connect/SKILL.md)。
 
 ## 已有安装和发布范围

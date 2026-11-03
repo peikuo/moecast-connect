@@ -5,7 +5,7 @@ description: Automatically detect macOS Apple Silicon or Windows x64 and install
 
 # MoeCast Codex Connect
 
-Connector release: **0.2.0-preview.10**. Use `release.json.platforms` for supported targets. Refresh stale local Skill files instead of relying on a cached Mac-only summary or an older website archive.
+Read the installed version from `release.json.version` and supported targets from `release.json.platforms`. Refresh stale local Skill files instead of relying on a cached Mac-only summary or an older website archive.
 
 The local gateway and HTTPS relay carry messages to one existing desktop Codex chat. Desktop Codex does the work using its own capabilities and settings. The connection does not register chat tools, choose business targets, change the model or permissions, start a second executor, or resume a chat in another runtime.
 
@@ -19,9 +19,9 @@ Use an absolute path: `node <skill-directory>/scripts/connect.mjs <command>`. Th
 2. Run `doctor` to detect the local OS and CPU architecture. The helper automatically selects the matching runtime and tunnel; do not ask the user to choose a platform, architecture, branch or binary. Install/update this Skill from the repository default branch, not a platform-specific test branch. If unsupported, explain the detected limit instead of asking the user to pick another platform. Install if needed. Open/sign in to desktop Codex if necessary. `install` does not create or execute a chat.
 3. Run `start --thread <existing-desktop-thread-id>`. In that chat, `CODEX_THREAD_ID` may supply the same ID. Pairing checks the native metadata, desktop availability and queue capability, then includes the canonical fixed selection in the invitation. A saved binding can be reused by `pair`; use an explicit ID when changing the entry.
 4. Wait for trusted public HTTPS readiness. Show `qrPngFile` inline or open that local image. Do not paste codes, payloads or credentials. Codes expire after two minutes and are single-use; refresh with `pair --thread <same-id>`.
-5. Check `devices` before claiming the phone paired. The phone saves and opens the supplied fixed entry; no frontend model selection is needed. Health checks alone do not prove a scan or message succeeded.
+5. Check `devices` before claiming the phone paired. The phone saves and opens the supplied fixed entry; no frontend model selection is needed. Health checks alone do not prove a scan or message succeeded. Pairing also does not prove desktop native tools are loaded or callable; check those separately when investigating a cross-chat failure.
 
-On Windows read [Windows testing](references/windows.md) before installation or diagnosing a failed native wake.
+On Windows read [Windows testing](references/windows.md) before installation or diagnosing native wake / cross-chat tool failures. It includes a user-reported plugin-registration case, not a universal installation step.
 
 Startup adds no login item, supervisor or recurring task. Normal reconnection preserves device identity, history and fixed binding. The gateway owns its computer identity in gateway/identity.json and connects directly to desktop Codex; it does not install or start an HAPI Hub or Runner. No work is sent as a connection probe.
 

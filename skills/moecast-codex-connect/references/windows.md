@@ -34,3 +34,18 @@ The phone must use the Windows-host compatibility APK from this development hand
 - The Windows tunnel is cross-compiled from the same pinned upstream revision and narrow certificate patch as Mac; see `assets/runtime/scripts/connect/tunwg/win32-x64/build-manifest.json` and dependency notices.
 - [Official OpenAI Windows documentation](https://learn.chatgpt.com/docs/windows/windows-app) explains native PowerShell versus WSL environments.
 - Windows wake uses the OS URI association through [PowerShell Start-Process](https://learn.microsoft.com/en-us/powershell/module/microsoft.powershell.management/start-process), with an existing validated thread UUID; the connector never registers a replacement protocol handler.
+
+
+## Windows local case: native plugin registration
+
+On 2026-11-03 the user reported a successful Windows debugging session with this sequence: bundled plugin synchronization was skipped, the native app-tools plugin was not installed, and writing an enable flag alone did not load its tools. Supplying the complete native MCP definition restored the integration on that machine. This is a user-reported local case; individual tool-call logs and the app version/path are not included here. It does not establish that every Windows installation needs a manual MCP definition or that every listed operation was exercised.
+
+When the same symptoms appear:
+
+1. Confirm pairing separately from native tool discovery and invocation. Use the [cross-chat evidence rules](frontdesk.md#cross-chat-capabilities-and-evidence) and record the eight tools individually.
+2. Inspect plugin registration, whether bundled synchronization ran or was skipped, plugin installation state, startup errors and the actual effective configuration. Do not assume an enable flag creates a missing registration.
+3. Before editing, back up the relevant configuration outside active configuration/plugin discovery paths. Preserve unrelated entries and use the verified native integration's executable, arguments and full required MCP definition for this installed version. An incomplete flag is not a substitute for the definition; an invented custom MCP is not the native integration.
+4. A direct reference into an app-version directory is a temporary local workaround. Record the app version and referenced path without secrets, and recheck registration and a read-only native invocation after an app update. Prefer the app's maintained plugin mechanism when it is available.
+5. Verify read-only native queries first. For sending, creating, forking, handing off or deleting, obtain authorization from the user's actual requested action; never run a mutation automatically as acceptance testing. Report unsupported schema, absent registration, startup failure or failed invocation specifically rather than declaring cross-chat unsupported.
+
+Do not apply this workaround to machines whose native tools already load. This case does not change the connector's normal installation or grant it permission to rewrite Codex configuration automatically.

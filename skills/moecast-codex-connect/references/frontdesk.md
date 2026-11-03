@@ -12,3 +12,16 @@ Phone locale selects the default. The actual final Codex answer is returned. Del
 First pairing embeds the selected existing desktop thread, machine and directory. Only the canonical native thread ID is accepted; session aliases and old executor paths are unsupported. A missing binding requires fixing the connection on the computer. Native queue/wake support depends on the installed desktop version and is checked before pairing; unsupported versions remain an explicit connection failure.
 
 Historical custom-tool results are retained only as old display/evidence data. They cannot establish success of the current native path. Do not restore deleted adapters, setup injection or executor recovery to make a test pass.
+
+
+## Cross-chat capabilities and evidence
+
+Cross-chat work must use the desktop's native Codex tools. Reading Codex databases, simulating the UI, or starting another executor is not a replacement for an unavailable native tool. Do not infer that Windows lacks cross-chat support merely because pairing passed but a tool is missing.
+
+Separate evidence for connection/pairing, native tool registration in the actual chat, and successful invocation. Inspect the available schemas for `list_projects`, `list_threads`, `read_thread`, `wait_threads`, `send_message_to_thread`, `create_thread`, `handoff_thread` and `fork_thread`. Record each as available/unavailable and invoked/not invoked; list visibility alone is not invocation success. Use returned project/thread/host IDs; do not guess them.
+
+If the default `list_threads` call hangs, use the same native tool with explicit local Codex history selection, where supported by its schema: `list_threads({mode:"history", source:"codex"})`. The calling host is the default; specify `hostId` only when it is a known real host. A successful explicit query does not prove that the default mode was repaired.
+
+Read-only discovery and checks do not authorize sending messages, creating/forking chats, handing off or interrupting work, or deleting anything. Perform such tests only when the user's request authorizes that exact action; do not dispatch test work just to prove a connection.
+
+For missing tools, examine the native plugin's registration, startup diagnostics and effective configuration, then report the concrete failing stage. Back up configuration before a repair. Restore the packaged native integration only from verified local definitions; do not introduce custom tools as a substitute. See the [Windows local case](windows.md#windows-local-case-native-plugin-registration) before proposing a Windows configuration workaround.
