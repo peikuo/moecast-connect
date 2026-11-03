@@ -4,7 +4,7 @@ MoeCast 的电脑连接 Skill 集合。仓库名为 `moecast-connect`；每个�
 
 | Skill | 目标 | 当前状态 |
 | --- | --- | --- |
-| [`moecast-codex-connect`](skills/moecast-codex-connect/SKILL.md) | 桌面 Codex | Mac Apple Silicon 预览；Windows x64 测试候选 |
+| [`moecast-codex-connect`](skills/moecast-codex-connect/SKILL.md) | 桌面 Codex | Mac Apple Silicon／Windows x64（已有用户调通反馈） |
 | `moecast-claude-connect` | Claude | 未来规划，尚无可安装实现 |
 | `moecast-grok-connect` | Grok | 未来规划，尚无可安装实现 |
 
@@ -22,7 +22,7 @@ Mac 和 Windows 都使用同一个 Skill 和默认安装入口。将以下指令
 npx skills add peikuo/moecast-connect --skill moecast-codex-connect --agent codex
 ```
 
-Skill 会自动检测系统和 CPU 架构，选择对应安装组件，用户无需选择平台、分支或二进制。目前提供 Mac Apple Silicon 预览和 Windows x64 测试候选。两者都需要 Node.js 22+、已登录且正在运行的本机 Codex 桌面 App。Windows 请在原生 PowerShell 环境操作，不能使用网页版聊天或 WSL 代替本机入口。CLI 登录本身不足以建立原生桌面连接；Windows 原生聊天唤起、手机配对和附件仍需实机验收，不能沿用 Mac 成绩。详见 [Windows 测试步骤](skills/moecast-codex-connect/references/windows.md)。
+Skill 会自动检测系统和 CPU 架构，选择对应安装组件，用户无需选择平台、分支或二进制。目前支持 Mac Apple Silicon 和 Windows x64，已有用户 Windows 调通反馈；不同桌面版本仍需按实际能力验证。两者都需要 Node.js 22+、已登录且正在运行的本机 Codex 桌面 App。Windows 请在原生 PowerShell 环境操作，不能使用网页版聊天或 WSL 代替本机入口。CLI 登录本身不足以建立原生桌面连接；Windows 聊天唤起、配对、原生工具和附件等应按本机逐项记录，不能仅据配对成功或 Mac 成绩推断全部通过。详见 [Windows 测试步骤](skills/moecast-codex-connect/references/windows.md)。
 
 用户已报告一台 Windows 机器调试成功。配对、原生工具加载和实际调用应分别记录；该机器的插件注册临时修复见 [Windows 本机排障案例](skills/moecast-codex-connect/references/windows.md#windows-local-case-native-plugin-registration)，不能推广为所有机器的安装步骤。
 

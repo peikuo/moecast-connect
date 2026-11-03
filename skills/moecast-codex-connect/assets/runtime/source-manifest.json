@@ -1,7 +1,7 @@
 {
   "files": {
     "scripts/hapi-connect.mjs": "ee2568f30c87ab9d89d6c6aa0466702c6cbf49a3075460a3ad742cad28365aa3",
-    "skills/moecast-codex-connect/references/frontdesk.md": "785bd0af998f65770e0938fcabf69620e27b4ae3bf34e133cbd8f13aa918d365",
+    "skills/moecast-codex-connect/references/frontdesk.md": "51ca489e57bcf39907ebcf2dde1e788642ab779e47e1a78aa7daa0be12847701",
     "scripts/codex/connect-platform.mjs": "62b3c96fe97feb2e0aca1dbf650608cfa194eaf62fd278f68d0da8ae5ff92a97",
     "scripts/codex/computer-identity.mjs": "f382e60bba811e43826828665027fc1d7b6d320c150eec344833c7db1cf4dbb0",
     "scripts/codex/native-request.mjs": "a7e605d585490f00ce0cb62076f804ff87ce01731adba8b0dd6953e43c19091c",

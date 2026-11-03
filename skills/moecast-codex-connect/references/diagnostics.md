@@ -8,7 +8,7 @@ Run `doctor` first. Report sanitized failing stages, never credentials, complete
 | Unsupported platform | Preview supports macOS Apple Silicon and Windows x64 candidate; report other platforms. Windows requires native PowerShell / Windows Node, not WSL. |
 | Missing runtime / integrity failure | Install the trusted package. Never weaken checksum verification. |
 | Desktop Codex closed or signed out | Open/sign in on the computer, then retry the saved connection. CLI login alone is insufficient. |
-| Native queue/wake unavailable | Report installed-version incompatibility. Do not start another executor or add custom tools. |
+| Native queue/wake unavailable | Report the failing stage and exact sanitized error. Check desktop availability, endpoint/schema support and the OS URI handler as applicable; call it version incompatibility only when evidence establishes that. Missing cross-chat tools are a separate plugin-registration check. Do not start another executor or add custom tools. |
 | Paired but cross-chat native tools missing / default thread listing hangs | Separate pairing from native registration and invocation. Inspect plugin sync/install, startup logs and effective configuration. Use the same native thread-list tool with explicit local Codex history selection when its schema supports it. See the Windows local case; do not assume Windows lacks the capability or automatically inject configuration. |
 | Fixed entry missing | Run pairing from the intended existing desktop chat with its exact `--thread` ID. Do not select or create a business target on the phone. |
 | Owned gateway or tunnel stopped | Run `repair` for connection services only. Preserve device credentials and native binding. |

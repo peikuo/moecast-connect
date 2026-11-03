@@ -1,6 +1,6 @@
 {
   "name": "moecast-codex-connect-runtime",
-  "version": "0.2.0-preview.12",
+  "version": "0.2.0-preview.13",
   "private": true,
   "dependencies": {
     "qrcode": "1.5.4",
