@@ -18,7 +18,7 @@ export async function privateDirectory(directory, {platform=process.platform, ru
  run('icacls.exe',[directory,'/inheritance:r','/grant:r',`*${sid}:(OI)(CI)F`],{encoding:'utf8',windowsHide:true,timeout:10000,stdio:['ignore','pipe','pipe']});
 }
 export function adminEndpoint(home, platform=process.platform) {
- if(platform!=='win32')return path.join(home,'admin.sock');
+ if(platform!=='win32')return path.posix.join(home,'admin.sock');
  const key=createHash('sha256').update(path.win32.normalize(home).toLowerCase()).digest('hex').slice(0,32);
  return {path:`\\\\.\\pipe\\moecast-connect-${key}`,tokenFile:path.win32.join(home,'admin-token')};
 }

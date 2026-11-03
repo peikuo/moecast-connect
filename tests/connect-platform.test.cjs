@@ -8,6 +8,15 @@ test('Windows admin endpoint is stable across path casing and isolated between i
  assert.notEqual(a.path,adminEndpoint('C:\\Users\\Bob\\App Data','win32').path);
  assert.equal(adminEndpoint('/tmp/one','darwin'),'/tmp/one/admin.sock');
 });
+test('pairing preserves native absolute directories on its host rather than assuming POSIX paths',async t=>{
+ const{DeviceStore}=await import('../skills/moecast-codex-connect/assets/runtime/scripts/codex/hapi-device-store.mjs');const{randomUUID}=require('node:crypto');
+ const root=await fs.mkdtemp(path.join(os.tmpdir(),'moecast pairing 用户 '));t.after(()=>fs.rm(root,{recursive:true,force:true}));
+ const store=new DeviceStore(path.join(root,'devices.json'));await store.load();const threadId=randomUUID();
+ const selection={sessionId:threadId,threadId,machineId:randomUUID(),directory:root};
+ const invitation=await store.issuePairing({selection});const paired=await store.pair(invitation.code);
+ assert.deepEqual(paired.selection,selection);
+ await assert.rejects(store.issuePairing({selection:{...selection,directory:'relative'}}),/INVALID_FRONTDESK_BINDING/);
+});
 test('Windows process ownership checks executable and exact decoded arguments, including spaces and Chinese',async()=>{
  const{ownsProcess,windowsArgs}=await load();
  const executable='C:\\Program Files\\nodejs\\node.exe',script='C:\\Users\\用户\\连接 工具\\scripts\\hapi-connect.mjs';

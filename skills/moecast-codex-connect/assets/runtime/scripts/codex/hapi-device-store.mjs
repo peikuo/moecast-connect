@@ -24,7 +24,7 @@ export class DeviceStore {
   }
   issuePairing(input={}){return this.transaction(async()=>{
     const grants=await this.grants(input.grants);
-    const selection=input.selection;if(selection&&(!isId(selection.threadId)||selection.sessionId!==selection.threadId||!isId(selection.machineId)||typeof selection.directory!=='string'||!selection.directory.startsWith('/')))throw fault('INVALID_FRONTDESK_BINDING');
+    const selection=input.selection;if(selection&&(!isId(selection.threadId)||selection.sessionId!==selection.threadId||!isId(selection.machineId)||typeof selection.directory!=='string'||!path.isAbsolute(selection.directory)||selection.directory.includes('\0')))throw fault('INVALID_FRONTDESK_BINDING');
     const code=randomBytes(32).toString('base64url');
     const expiresAt=this.now()+120000;
     // Codes are single-use, 256-bit and short-lived. Disk contains only their hashes.

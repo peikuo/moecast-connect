@@ -2,7 +2,7 @@
   "files": {
     "scripts/hapi-connect.mjs": "ee2568f30c87ab9d89d6c6aa0466702c6cbf49a3075460a3ad742cad28365aa3",
     "skills/moecast-codex-connect/references/frontdesk.md": "627131e9f0ccd13e72c3e1d485a7378163a241ad0f0fc5c6dda9d3938b0d928b",
-    "scripts/codex/connect-platform.mjs": "66708d9d5bbe3e129baa0d2fcd278dfe91aa1d1c4cf4ab9b9e6c80fe9b93dc70",
+    "scripts/codex/connect-platform.mjs": "62b3c96fe97feb2e0aca1dbf650608cfa194eaf62fd278f68d0da8ae5ff92a97",
     "scripts/codex/computer-identity.mjs": "f382e60bba811e43826828665027fc1d7b6d320c150eec344833c7db1cf4dbb0",
     "scripts/codex/native-request.mjs": "a7e605d585490f00ce0cb62076f804ff87ce01731adba8b0dd6953e43c19091c",
     "scripts/codex/desktop-thread-inbox.mjs": "e892a46046d9fa2298c030b49ee0c8610a81fb55b319f18683a84bd1fcfdbea3",
@@ -10,7 +10,7 @@
     "scripts/codex/hapi.cjs": "5492ddaf281866a03f7b00342392082be28b72b7c39d68d5dfb76836472ad8e2",
     "scripts/codex/hapi-core.js": "c413159de3aba47297eb48ab910c07af5bae8e96e7d224a3f177f2a0e4ed8aa9",
     "scripts/codex/message-sync.js": "7ef5d569373fa1329e6d9ac0377c5b7919cf158dbf9f9a9eac9ea2d84c57616f",
-    "scripts/codex/hapi-device-store.mjs": "bc97e061f175352ce0a61f838ae728c0800daa0de49833bec4daaff9f334d72e",
+    "scripts/codex/hapi-device-store.mjs": "7a832ea52b2dfbb5a4466ac3e127b09d0f974190bfdf4c2a34159828c6c2a81a",
     "scripts/codex/hapi-directory.mjs": "647cca2a6b473734bbf296c210f721b5968d822cbecefede24f73b32489aceef",
     "scripts/codex/hapi-fixed-assistant.mjs": "1eaecabef04ea779bba5c47cb6a05d8c549a5572721bbb3a648f83f1a095c991",
     "scripts/codex/hapi-gateway.mjs": "2209522a3d8270e192bf85619766ce853045be9efb4adadd457ff240ec2fd377",

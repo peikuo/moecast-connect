@@ -1,0 +1,8 @@
+{
+  "sha256": "aa0e4710e97ca3159d46823d07e27e9ca124b9dbca73a256fb5ea5b32b135892",
+  "installed": false,
+  "phoneChange": "Accept Windows drive / UNC metadata in bound desktop selection, preserve UUID identity validation; no local inference changes.",
+  "fileName": "MoeCast-0.2.0-code5-windows-host-signed.apk",
+  "signingCertificateSha256": "6ce5d24b8d566d50ae4301b07cc9fc0fd876970adcd9009266c2e5093a86f258",
+  "downloadStatus": "Prepared locally; not in the regular app update feed."
+}

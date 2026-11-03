@@ -1,0 +1,10 @@
+--- a/apps/web/src/codex/connectionContracts.ts
++++ b/apps/web/src/codex/connectionContracts.ts
+@@ -56,6 +56,6 @@
+ export interface BoundDesktopSelection { sessionId:string;threadId:string;machineId:string;directory:string }
+ export function parseBoundDesktopSelection(value:unknown):BoundDesktopSelection|undefined {
+   if(value==null)return;const v=value as Partial<BoundDesktopSelection>;const valid=(x:unknown)=>typeof x==='string'&&/^[a-f0-9]{8}(-[a-f0-9]{4}){3}-[a-f0-9]{12}$/i.test(x);
+-  if(!valid(v.threadId)||v.sessionId!==v.threadId||!valid(v.machineId)||typeof v.directory!=='string'||!v.directory.startsWith('/')||v.directory.includes('\0'))throw new Error('HAPI_PROTOCOL_MISMATCH');
++  if(!valid(v.threadId)||v.sessionId!==v.threadId||!valid(v.machineId)||typeof v.directory!=='string'||!(v.directory.startsWith('/')||/^[a-zA-Z]:[\\/]/.test(v.directory)||/^\\\\[^\\/]+[\\/][^\\/]+/.test(v.directory))||v.directory.includes('\0'))throw new Error('HAPI_PROTOCOL_MISMATCH');
+   return {sessionId:v.sessionId!,threadId:v.threadId!,machineId:v.machineId!,directory:v.directory};
+ }
