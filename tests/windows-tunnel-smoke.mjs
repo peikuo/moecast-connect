@@ -1,0 +1,14 @@
+import fs from 'node:fs/promises';
+import {createHash} from 'node:crypto';
+import {execFileSync} from 'node:child_process';
+import assert from 'node:assert/strict';
+import {fileURLToPath} from 'node:url';
+const base=new URL('../skills/moecast-codex-connect/',import.meta.url);
+const release=JSON.parse(await fs.readFile(new URL('release.json',base),'utf8'));
+const binary=new URL('assets/runtime/scripts/connect/tunwg/win32-x64/tunwg.exe',base);
+const data=await fs.readFile(binary);
+assert.equal(createHash('sha256').update(data).digest('hex'),release.tunnels['win32-x64'].sha256);
+assert.equal(data.subarray(0,2).toString(),'MZ');
+const pe=data.readUInt32LE(0x3c);assert.equal(data.readUInt16LE(pe+4),0x8664);
+if(process.platform==='win32')execFileSync(fileURLToPath(binary),['--help'],{encoding:'utf8',timeout:10000,windowsHide:true,stdio:['ignore','pipe','pipe']});
+console.log(process.platform==='win32'?'Pinned PE x64 checksum and help smoke passed; no relay or model started.':'Pinned PE x64 checksum passed; execution deferred to Windows.');

@@ -181,10 +181,17 @@ export class DeviceGateway {
   }
   async listen(port=3317){await new Promise((resolve,reject)=>{this.server.once('error',reject);this.server.listen(port,'127.0.0.1',resolve);});return this.server.address().port;}
   async admin(socket){
-    try{await fs.unlink(socket);}catch(e){if(e.code!=='ENOENT')throw e;}
+    const endpoint=typeof socket==='string'?socket:socket.path;
+    // Windows pipe DACLs differ from Unix socket modes: also require an
+    // installation-local capability stored under the current user's private ACL.
+    const adminToken=typeof socket==='string'?null:randomBytes(32).toString('hex');
+    if(adminToken)await fs.writeFile(socket.tokenFile,adminToken,{mode:0o600});
+    else try{await fs.unlink(endpoint);}catch(e){if(e.code!=='ENOENT')throw e;}
     this.adminServer=net.createServer(conn=>{let input='';conn.setTimeout(5000,()=>conn.destroy());conn.on('data',chunk=>{
       input+=chunk;if(input.length>32768){conn.destroy();return;}if(!input.includes('\n'))return;conn.pause();
-      (async()=>{let result;const request=JSON.parse(input.split('\n')[0]);conn.setTimeout(request.action==='deliver'?180000:10000);
+      (async()=>{let result;const request=JSON.parse(input.split('\n')[0]);
+        if(adminToken&&(typeof request.adminToken!=='string'||digest(request.adminToken)!==digest(adminToken)))throw fault('ADMIN_ACCESS_DENIED',403);
+        conn.setTimeout(request.action==='deliver'?180000:10000);
         if(request.action==='pair'){const threadId=request.frontdeskThreadId;if(!isId(threadId))throw fault('FIXED_FRONTDESK_REQUIRED',409);const t=await this.directory.codex.metadata(threadId);if(t?.id!==threadId||!path.isAbsolute(t.cwd))throw fault('INVALID_FRONTDESK_BINDING');await this.assistant.desktopInbox(threadId).available();await this.directory.codex.rpc('thread/queue/list',{threadId,limit:1});result=await this.store.issuePairing({...request,selection:{sessionId:threadId,threadId,machineId:this.directory.machineId,directory:t.cwd}});}
         else if(request.action==='revoke')result=await this.store.revoke(request.id);
         else if(request.action==='devices')result=this.store.list();
@@ -205,10 +212,13 @@ export class DeviceGateway {
         else throw fault('INVALID_ADMIN_ACTION');conn.end(JSON.stringify({result})+'\n');
       })().catch(e=>conn.end(JSON.stringify({error:e.status?e.message:'ADMIN_FAILED'})+'\n'));
     });});
-    await new Promise((resolve,reject)=>{this.adminServer.once('error',reject);this.adminServer.listen(socket,resolve);});await fs.chmod(socket,0o600);
+    await new Promise((resolve,reject)=>{this.adminServer.once('error',reject);this.adminServer.listen(endpoint,resolve);});if(!adminToken)await fs.chmod(endpoint,0o600);
   }
   async close(){for(const set of this.streams.values())for(const res of set)res.end();this.server.closeAllConnections();await new Promise(r=>this.server.close(r));if(this.adminServer)await new Promise(r=>this.adminServer.close(r));}
 }
-export async function adminRequest(socket,args){return new Promise((resolve,reject)=>{
-  const conn=net.connect(socket);let result='';conn.setTimeout(args.action==='deliver'?180000:10000,()=>conn.destroy(Error('ADMIN_TIMEOUT')));conn.on('connect',()=>conn.write(JSON.stringify(args)+'\n'));conn.on('data',chunk=>{result+=chunk;});conn.on('error',reject);conn.on('end',()=>{try{const data=JSON.parse(result);if(data.error)reject(fault(data.error));else resolve(data.result);}catch(e){reject(e);}});
+export async function adminRequest(socket,args){
+ const endpoint=typeof socket==='string'?socket:socket.path;
+ const payload=typeof socket==='string'?args:{...args,adminToken:await fs.readFile(socket.tokenFile,'utf8')};
+ return new Promise((resolve,reject)=>{
+  const conn=net.connect(endpoint);let result='';conn.setTimeout(args.action==='deliver'?180000:10000,()=>conn.destroy(Error('ADMIN_TIMEOUT')));conn.on('connect',()=>conn.write(JSON.stringify(payload)+'\n'));conn.on('data',chunk=>{result+=chunk;});conn.on('error',reject);conn.on('end',()=>{try{const data=JSON.parse(result);if(data.error)reject(fault(data.error));else resolve(data.result);}catch(e){reject(e);}});
 });}

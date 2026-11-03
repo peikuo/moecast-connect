@@ -1,0 +1,28 @@
+name: Connection platform checks
+on:
+  push:
+    paths: ['skills/**', 'tests/**', '.github/workflows/platform.yml']
+  pull_request:
+    paths: ['skills/**', 'tests/**', '.github/workflows/platform.yml']
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  platform:
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [windows-latest, macos-latest]
+    runs-on: ${{ matrix.os }}
+    timeout-minutes: 12
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - run: npm ci --ignore-scripts --no-audit --no-fund
+        working-directory: skills/moecast-codex-connect/assets/runtime
+      - run: node --test tests/connect-platform.test.cjs tests/desktop-thread-inbox.test.cjs
+      - name: Verify bundled Windows x64 tunnel
+        if: runner.os == 'Windows'
+        run: node tests/windows-tunnel-smoke.mjs

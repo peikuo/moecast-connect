@@ -1,12 +1,11 @@
-MoeCast Connect — connection Skill preview.
+MoeCast Connect — desktop connection Skill preview.
 
-The HAPI binary is not redistributed here. Installation retrieves its pinned npm
-package with an integrity check. HAPI retains its own upstream license.
+This gateway does not install or start an HAPI Hub or Runner.
+The modified tunwg is built from tiann/tunwg revision
+122a6d0e43585bed8782ceb893394104b6640589, with the included narrow
+ACME retry/fallback patch. Windows x64 binary and build provenance are included;
+Mac installs retrieve the pinned binary. Upstream and dependency license notices
+are under skills/moecast-codex-connect/assets/runtime/scripts/connect/tunwg/.
 
-The modified tunwg binary is built from tiann/tunwg revision
-122a6d0e43585bed8782ceb893394104b6640589. The narrow ACME retry/fallback patch,
-build provenance, upstream MIT license and linked dependency license notices are
-included under assets/runtime/scripts/connect/tunwg/.
-
-No MoeCast app source, account state, pairing credentials, model weights, or chat
-history is included in this standalone Skill distribution.
+No app user data, account state, pairing credentials, model weights or chat history
+is included. Windows desktop/phone acceptance remains pending user testing.

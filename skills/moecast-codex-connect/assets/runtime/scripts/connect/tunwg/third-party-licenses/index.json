@@ -49,10 +49,10 @@
     ]
   },
   {
-    "module": "golang.org/x/time",
-    "version": "v0.15.0",
+    "module": "golang.zx2c4.com/wintun",
+    "version": "v0.0.0-20230126152724-0fa3db229ce2",
     "files": [
-      "golang.org_x_time-LICENSE"
+      "golang.zx2c4.com_wintun-LICENSE"
     ]
   },
   {
@@ -67,6 +67,13 @@
     "version": "v0.0.0-20231110203233-9a3e6036ecaa",
     "files": [
       "golang.org_x_exp-LICENSE"
+    ]
+  },
+  {
+    "module": "golang.org/x/time",
+    "version": "v0.15.0",
+    "files": [
+      "golang.org_x_time-LICENSE"
     ]
   },
   {

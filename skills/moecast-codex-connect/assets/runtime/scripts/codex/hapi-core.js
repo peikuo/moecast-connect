@@ -341,7 +341,7 @@ class Hapi {
   }
   disconnect() {
     this.stopStream(); this.jwt = undefined; this.accessToken = undefined;
-    this.patch({ connected: false, gateway: false, streaming: false, machines: [], messages: [], updates: [], sync: undefined, requests: [], sessionId: undefined, threadId: undefined, thinking: false, active: false, error: undefined });
+    this.patch({ connected: false, gateway: false, streaming: false, url: undefined, hubId: undefined, deviceId: undefined, grants: undefined, capabilities: undefined, machineId: undefined, directory: this.directory, machines: [], messages: [], updates: [], sync: undefined, requests: [], sessionId: undefined, threadId: undefined, thinking: false, active: false, error: undefined });
   }
 }
 

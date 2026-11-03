@@ -22,7 +22,9 @@ class Codex {
     try { selected = JSON.parse(await fs.readFile(path.join(this.root, 'codex-executable.json'), 'utf8')).path; } catch { /* Optional user-selected installation. */ }
     const candidates = this.paths || [
       ...(typeof selected === 'string' && path.isAbsolute(selected) ? [selected] : []),
+      ...(typeof process.env.CODEX_CLI_PATH==='string'&&path.isAbsolute(process.env.CODEX_CLI_PATH)?[process.env.CODEX_CLI_PATH]:[]),
       ...(this.platform === 'darwin' ? ['/Applications/ChatGPT.app/Contents/Resources/codex-cli/bin/codex', '/Applications/Codex.app/Contents/Resources/codex'] : []),
+      ...(this.platform === 'win32' ? await (await import('./connect-platform.mjs')).windowsCodexPaths() : []),
       path.join(os.homedir(), '.local', 'bin', this.platform === 'win32' ? 'codex.exe' : 'codex'),
       ...(process.env.PATH || '').split(path.delimiter).filter(Boolean).flatMap(dir => this.platform === 'win32'
         ? [path.join(dir, 'codex.exe'), path.join(dir, 'node_modules/@openai/codex/bin/codex.js'), ...['@openai/codex', '@openai/codex-win32-x64'].map(pkg => path.join(dir, 'node_modules', pkg, 'vendor', 'x86_64-pc-windows-msvc', 'codex', 'codex.exe'))]

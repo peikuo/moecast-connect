@@ -5,7 +5,7 @@ Run `doctor` first. Report sanitized failing stages, never credentials, complete
 | Symptom | Action |
 | --- | --- |
 | Node missing / below 22 | Use an official distribution or the user's trusted package manager. |
-| Unsupported platform | Preview supports macOS Apple Silicon; report the limit. |
+| Unsupported platform | Preview supports macOS Apple Silicon and Windows x64 candidate; report other platforms. Windows requires native PowerShell / Windows Node, not WSL. |
 | Missing runtime / integrity failure | Install the trusted package. Never weaken checksum verification. |
 | Desktop Codex closed or signed out | Open/sign in on the computer, then retry the saved connection. CLI login alone is insufficient. |
 | Native queue/wake unavailable | Report installed-version incompatibility. Do not start another executor or add custom tools. |
@@ -17,5 +17,7 @@ Run `doctor` first. Report sanitized failing stages, never credentials, complete
 | Phone fails when computer sleeps | Tell the user to wake the computer and open Codex; the phone cannot wake stopped connection services. |
 | Explicitly revoked pairing | Pair the intended device again. Do not revoke other devices. |
 | Lost or delayed reply | Read by the saved native client message ID. Pending/busy/read outages are not proof of failure; never resend to test delivery. |
+
+Windows: `icacls`, CIM process ownership, per-installation authenticated named pipe, desktop running / queue / wake and the bundled x64 tunnel are separate checks. Permission or capability failures must remain visible; do not elevate, change the default URL handler, use a different thread or launch a replacement executor.
 
 After repair verify the same device and chat. Local/public health alone does not verify phone recovery. There is no automatic startup registration or Codex executor recycling.

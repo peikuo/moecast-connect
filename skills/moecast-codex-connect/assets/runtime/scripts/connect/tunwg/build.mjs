@@ -4,6 +4,9 @@ import path from 'node:path';
 import os from 'node:os';
 import {createHash} from 'node:crypto';
 import {execFileSync} from 'node:child_process';
+const target=process.argv.find(a=>a.startsWith('--platform='))?.slice(11)??'darwin-arm64';
+if(!['darwin-arm64','win32-x64'].includes(target))throw Error('UNSUPPORTED_BUILD_PLATFORM');
+const goTarget={CGO_ENABLED:'0',GOOS:target==='win32-x64'?'windows':'darwin',GOARCH:target==='win32-x64'?'amd64':'arm64'};
 const here=import.meta.dirname,revision='122a6d0e43585bed8782ceb893394104b6640589';
 const sourceUrl=`https://codeload.github.com/tiann/tunwg/tar.gz/${revision}`;
 const sourceSha256='683bab2b270afa6c88d087d3250a78635fc650d71bfdedf9372739ba946d91af';
@@ -17,21 +20,22 @@ try{
  run('patch',['-p1','-i',path.join(here,'certificate-fallback.patch')]);
  await fs.copyFile(path.join(here,'certificate_backoff_test.go'),path.join(tmp,'internal/certificate_backoff_test.go'));
  run(go,['test','./internal','./tunwg']);
- const output=path.join(here,'tunwg'),staging=path.join(here,'tunwg.next');
- run(go,['build','-trimpath',"-ldflags=-s -w",'-o',staging,'./tunwg'],{env:{...process.env,CGO_ENABLED:'0',GOOS:'darwin',GOARCH:'arm64'}});
+ const destination=target==='darwin-arm64'?here:path.join(here,target);await fs.mkdir(destination,{recursive:true});
+ const output=path.join(destination,target==='win32-x64'?'tunwg.exe':'tunwg'),staging=output+'.next';
+ run(go,['build','-trimpath',"-ldflags=-s -w",'-o',staging,'./tunwg'],{env:{...process.env,...goTarget}});
  await fs.rename(staging,output);
  const licenses=path.join(here,'third-party-licenses');await fs.mkdir(licenses,{recursive:true});
- const modules=new Map(run(go,['list','-deps','-f','{{if .Module}}{{.Module.Path}}|{{.Module.Version}}|{{.Module.Dir}}{{end}}','./tunwg']).toString().split('\n').filter(Boolean).map(row=>{const [module,version,dir]=row.split('|');return[module,{module,version,dir}];}));
- const index=[];
+ const modules=new Map(run(go,['list','-deps','-f','{{if .Module}}{{.Module.Path}}|{{.Module.Version}}|{{.Module.Dir}}{{end}}','./tunwg'],{env:{...process.env,...goTarget}}).toString().split('\n').filter(Boolean).map(row=>{const [module,version,dir]=row.split('|');return[module,{module,version,dir}];}));
+ let index=[];try{index=JSON.parse(await fs.readFile(path.join(licenses,'index.json'),'utf8'));}catch{}
  for(const info of modules.values()){
   if(!info.dir||info.module==='github.com/ntnj/tunwg')continue;
   const names=(await fs.readdir(info.dir)).filter(n=>/^(LICENSE|COPYING|NOTICE)(?:[._-].*)?$/i.test(n));
-  const files=[];for(const name of names){const source=path.join(info.dir,name);if(!(await fs.stat(source)).isFile())continue;const file=info.module.replaceAll('/','_')+'-'+name;await fs.copyFile(source,path.join(licenses,file));files.push(file);}
-  if(!files.length)throw Error('DEPENDENCY_LICENSE_MISSING: '+info.module);index.push({module:info.module,version:info.version,files});
+  const files=[];for(const name of names){const source=path.join(info.dir,name);if(!(await fs.stat(source)).isFile())continue;const file=info.module.replaceAll('/','_')+'-'+name;await fs.rm(path.join(licenses,file),{force:true});await fs.copyFile(source,path.join(licenses,file));await fs.chmod(path.join(licenses,file),0o644);files.push(file);}
+  if(!files.length)throw Error('DEPENDENCY_LICENSE_MISSING: '+info.module);index=index.filter(row=>row.module!==info.module);index.push({module:info.module,version:info.version,files});
  }
- const goroot=run(go,['env','GOROOT']).toString().trim();await fs.copyFile(path.join(goroot,'LICENSE'),path.join(licenses,'Go-LICENSE'));index.push({module:'Go standard library',version:run(go,['version']).toString().trim(),files:['Go-LICENSE']});
+ const goroot=run(go,['env','GOROOT']).toString().trim();await fs.rm(path.join(licenses,'Go-LICENSE'),{force:true});await fs.copyFile(path.join(goroot,'LICENSE'),path.join(licenses,'Go-LICENSE'));await fs.chmod(path.join(licenses,'Go-LICENSE'),0o644);index=index.filter(row=>row.module!=='Go standard library');index.push({module:'Go standard library',version:run(go,['version']).toString().trim(),files:['Go-LICENSE']});
  await fs.writeFile(path.join(licenses,'index.json'),JSON.stringify(index,null,2)+'\n');
  const hash=async f=>createHash('sha256').update(await fs.readFile(f)).digest('hex');
- await fs.writeFile(path.join(here,'build-manifest.json'),JSON.stringify({upstream:'https://github.com/tiann/tunwg',revision,sourceUrl,sourceSha256,patchSha256:await hash(path.join(here,'certificate-fallback.patch')),binarySha256:await hash(output),goVersion:run(go,['version']).toString().trim(),platform:'darwin-arm64',change:'Bound ACME retries so explicit rate limits reach the existing alternate issuer; omit EAB credential identifier from logs.'},null,2)+'\n');
+ await fs.writeFile(path.join(destination,'build-manifest.json'),JSON.stringify({upstream:'https://github.com/tiann/tunwg',revision,sourceUrl,sourceSha256,patchSha256:await hash(path.join(here,'certificate-fallback.patch')),binarySha256:await hash(output),goVersion:run(go,['version']).toString().trim(),platform:target,change:'Bound ACME retries so explicit rate limits reach the existing alternate issuer; omit EAB credential identifier from logs.'},null,2)+'\n');
  console.log('Pinned tunwg source verified, patched, tested and built.');
 }finally{await fs.rm(tmp,{recursive:true,force:true});}
