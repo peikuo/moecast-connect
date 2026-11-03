@@ -89,7 +89,7 @@ class Hapi {
   }
   async raw(route, method = 'GET', body, authenticated = true, streamSignal, requestSignal) {
     const token = this.jwt;
-    const timeout = () => AbortSignal.timeout(['/resume','/assistant/turn','/weather/turn','/sleep/turn'].some(suffix=>route.endsWith(suffix)) || /^\/api\/threads\/[^/]+\/open$/.test(route) ? 90000 : method === 'GET' && /^\/api\/(threads|sessions)(?:[/?]|$)/.test(route) ? 60000 : 15000);
+    const timeout = () => AbortSignal.timeout(route.endsWith('/assistant/turn') ? 150000 : ['/resume','/assistant/turn','/weather/turn','/sleep/turn'].some(suffix=>route.endsWith(suffix)) || /^\/api\/threads\/[^/]+\/open$/.test(route) ? 90000 : method === 'GET' && /^\/api\/(threads|sessions)(?:[/?]|$)/.test(route) ? 60000 : 15000);
     let response;
     try {
       response = await this.fetch(`${this.origin}${route}`, { method, redirect: 'error',

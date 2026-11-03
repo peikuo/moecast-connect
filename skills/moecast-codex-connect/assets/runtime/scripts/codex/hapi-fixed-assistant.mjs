@@ -4,7 +4,7 @@ import {digest,fault,isId} from './hapi-device-store.mjs';
 const requestIdValid=id=>typeof id==='string'&&/^[-a-zA-Z0-9_]{1,100}$/.test(id);
 /** One bound desktop inbox. This transport never plans work or starts a Codex execution. */
 export class FixedHapiAssistant {
- constructor({store,directory,model,desktopInbox,prepareAttachments,now=Date.now,replyWaitMs=75000,pollMs=750}){
+ constructor({store,directory,model,desktopInbox,prepareAttachments,now=Date.now,replyWaitMs=120000,pollMs=750}){
   if(typeof desktopInbox!=='function')throw fault('DESKTOP_INBOX_REQUIRED',500);
   Object.assign(this,{store,directory,model,desktopInbox,prepareAttachments,now,replyWaitMs,pollMs});this.queues=new Map();this.active=new Set();this.reconciliations=new Map();
  }
@@ -35,7 +35,7 @@ export class FixedHapiAssistant {
   await this.directory.authorization(this.store.require(id),old);return old;
  }
  turn(id,input){return this.serial(id,()=>this.perform(id,input));}
- pending(requestId,reason='DESKTOP_REPLY_PENDING'){return{kind:'reconciliation_required',requestId,reason,text:'桌面回复尚未确认，稍后会继续核对。',speech:null,automaticRetry:false};}
+ pending(requestId,reason='DESKTOP_REPLY_PENDING'){return{kind:'reconciliation_required',requestId,reason,text:'还没收到电脑回复，收到后会自动显示，请稍候。',speech:null,automaticRetry:false};}
  async perform(id,{text,requestId,frontdeskThreadId,locale='zh-CN'}){
   if(typeof text!=='string'||!text.trim()||text.length>8000||!requestIdValid(requestId))throw fault('INVALID_ASSISTANT_REQUEST');
   if(!['zh-CN','en-US'].includes(locale))throw fault('INVALID_LOCALE');
