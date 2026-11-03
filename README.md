@@ -42,6 +42,10 @@ Windows x64 隧道随 Skill 提供，安装时校验固定 SHA256；Mac 隧道�
 
 ## 版本与更新
 
-当前连接 Skill 为 **0.2.0-preview.10**，支持自动识别 Mac Apple Silicon 和 Windows x64。`doctor` 输出 `skillVersion` 与 `installedVersion`，请以实际文件和检查结果为准。若本地旧 Skill 仍声称只支持 Mac，备份旧 Skill 目录后从本仓库重新安装，并重新读取新 SKILL.md；不要清理位于 Skill 目录之外的配对、配置或聊天。
+当前连接 Skill 为 **0.2.0-preview.10**，支持自动识别 Mac Apple Silicon 和 Windows x64。`doctor` 输出 `skillVersion` 与 `installedVersion`，请以实际文件和检查结果为准。若本地旧 Skill 仍声称只支持 Mac，将旧 Skill 备份到 skills 搜索目录之外后，从本仓库重新安装，并重新读取新 SKILL.md；不要清理位于 Skill 目录之外的配对、配置或聊天。
 
 默认分支与 `main` 安装兼容入口发布同一版本，用户无需选择分支。旧的 preview.8 完整包仅作为历史归档，不能用于 Windows。
+
+## 安全与权限
+
+安装前请阅读 [安全说明](SECURITY.md)。默认扫码授权是电脑级 Codex 查看与派活，固定聊天是入口，并不将能力限制在该聊天。连接沿用桌面 Codex 的既有权限；目前没有独立安全审计，也不宣称绝对安全。
