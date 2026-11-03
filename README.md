@@ -30,7 +30,7 @@ npx skills add peikuo/moecast-connect --skill moecast-codex-connect --agent code
 
 Codex 连接器暂时沿用现有 `~/.local/share/moecast-connect` 状态目录及 `MOECAST_CONNECT_HOME`，改名不迁移或清空配对、身份和聊天记录。未来 Claude、Grok 连接器应分别设计状态与权限边界，不能直接复用 Codex 的凭据目录。
 
-Windows 候选不更新手机 APK、不修改现用 Mac 连接或官网正式归档；官网 preview.8 与当前 GitHub preview.9 候选分别记录。主机协议测试、交叉编译和 GitHub Windows CI 不代表真实 Windows Codex／手机已验收。
+Windows 连接还需要本轮单独交付的手机 Windows 路径兼容 APK，旧手机包会拒绝 Windows 目录；对应源码补丁与包校验记录在 [patches](patches/phone-compatibility.json)。本轮不修改现用 Mac 连接或官网正式归档；官网 preview.8 与当前 GitHub preview.9 候选分别记录。主机协议测试、交叉编译和 GitHub Windows CI 不代表真实 Windows Codex／手机已验收。
 
 ## 维护
 

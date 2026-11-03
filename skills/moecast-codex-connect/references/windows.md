@@ -2,6 +2,10 @@
 
 This branch adds native Windows plumbing. It does **not** establish that the installed Windows Codex build supports the existing queue and wake interfaces. Stop at a failed capability check and keep the same thread; do not substitute an executor. Record the commit, Windows / Codex / Node versions and the failed stage without credentials.
 
+## Phone compatibility prerequisite
+
+The phone must use the Windows-host compatibility APK from this development handoff. Older builds reject `C:\...` / UNC metadata as `HAPI_PROTOCOL_MISMATCH`, even when the Windows service is healthy. The signed candidate is `MoeCast-0.2.0-code5-windows-host-signed.apk`, SHA256 `aa0e4710e97ca3159d46823d07e27e9ca124b9dbca73a256fb5ea5b32b135892`, same production signing certificate. Its source change is recorded in `patches/android-windows-paths.patch` at the repository root. This candidate is not in the regular app update feed. Until installed, test only the Windows helper prerequisites; do not diagnose that old-phone rejection as a Windows service failure.
+
 ## First connection
 
 1. Open the installed Codex desktop App, sign in and open the existing **local Windows** chat you want as the phone entry. The agent must run in native PowerShell with Windows Node.js 22+ (`node -p "process.platform + '-' + process.arch"` must return `win32-x64`). Web/cloud/WSL chats are not this entry.
