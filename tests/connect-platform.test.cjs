@@ -59,7 +59,8 @@ test('Windows CI installs in isolated state and reports missing desktop without 
  const root=await fs.mkdtemp(path.join(os.tmpdir(),'moecast isolated 用户 '));t.after(()=>fs.rm(root,{recursive:true,force:true}));
  const helper=path.join(process.cwd(),'skills/moecast-codex-connect/scripts/connect.mjs');
  const run=command=>JSON.parse(require('node:child_process').execFileSync(process.execPath,[helper,command],{env:{...process.env,MOECAST_CONNECT_HOME:root},encoding:'utf8',timeout:180000,windowsHide:true}));
- assert.equal(run('install').installed,true);const report=run('doctor');
+ const installed=run('install');assert.equal(installed.installed,true);const report=run('doctor');
+ assert.equal(report.skillVersion,installed.version);assert.equal(report.installedVersion,installed.version);
  assert.equal(report.checks.platform.ok,true);assert.equal(report.checks.platform.value,'win32-x64');assert.equal(report.checks.runtimeIntegrity.ok,true);
  assert.equal(report.checks.desktopRunning.ok,false);assert.equal(report.serviceReady,false);
  assert.equal(report.autostart,false);assert.equal(report.supervisor,false);

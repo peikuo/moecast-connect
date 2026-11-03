@@ -1,10 +1,5 @@
 {
-  "version": "0.2.0-preview.9",
-  "platform": "darwin-arm64",
-  "tunnel": {
-    "url": "https://moecast.aixagent.cloud/connect/tunwg-darwin-arm64-0.2.0-preview.4.bin",
-    "sha256": "6e5fa5f287f7d30d4e93b8a525442650596a98bfa850cc4033dffb3e5567f00d"
-  },
+  "version": "0.2.0-preview.10",
   "platforms": [
     "darwin-arm64",
     "win32-x64"

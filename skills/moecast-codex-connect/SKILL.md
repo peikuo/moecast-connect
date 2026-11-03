@@ -1,9 +1,11 @@
 ---
 name: moecast-codex-connect
-description: Install, start, diagnose, repair or remove the connection from the MoeCast phone app to an existing desktop Codex chat, and deliver that chat's explicitly linked files. Use for phone pairing, connection failures and attachment delivery, not project work or API provider configuration.
+description: Automatically detect macOS Apple Silicon or Windows x64 and install, start, diagnose, repair or remove the connection from the MoeCast phone app to an existing desktop Codex chat, and deliver that chat's explicitly linked files. Use for phone pairing, connection failures and attachment delivery, not project work or API provider configuration.
 ---
 
 # MoeCast Codex Connect
+
+Connector release: **0.2.0-preview.10**. Use `release.json.platforms` for supported targets. Refresh stale local Skill files instead of relying on a cached Mac-only summary or an older website archive.
 
 The local gateway and HTTPS relay carry messages to one existing desktop Codex chat. Desktop Codex does the work using its own capabilities and settings. The connection does not register chat tools, choose business targets, change the model or permissions, start a second executor, or resume a chat in another runtime.
 

@@ -39,3 +39,9 @@ Windows 连接还需要本轮单独交付的手机 Windows 路径兼容 APK，�
 Windows x64 隧道随 Skill 提供，安装时校验固定 SHA256；Mac 隧道继续按固定 HTTPS 地址下载并校验。许可及固定源码信息保留在相应 Skill 的运行时目录。完整归档的生成、验证与发布是独立步骤，不修改既有归档冒充新版本。
 
 只提交连接器所需代码与许可。不要提交账号数据、设备凭据、二维码、模型权重、私人日志或聊天记录。
+
+## 版本与更新
+
+当前连接 Skill 为 **0.2.0-preview.10**，支持自动识别 Mac Apple Silicon 和 Windows x64。`doctor` 输出 `skillVersion` 与 `installedVersion`，请以实际文件和检查结果为准。若本地旧 Skill 仍声称只支持 Mac，备份旧 Skill 目录后从本仓库重新安装，并重新读取新 SKILL.md；不要清理位于 Skill 目录之外的配对、配置或聊天。
+
+默认分支与 `main` 安装兼容入口发布同一版本，用户无需选择分支。旧的 preview.8 完整包仅作为历史归档，不能用于 Windows。

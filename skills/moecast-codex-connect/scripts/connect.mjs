@@ -72,7 +72,8 @@ async function doctor(emit=true){
  checks.codexInstalled={ok:!!codex};
  try{checks.desktopRunning={ok:desktopRunning()};}catch{checks.desktopRunning={ok:false};}
  if(info.origin&&/^https:\/\/[a-z0-9]+\.relay\.hapi\.run$/.test(info.origin))try{const r=JSON.parse(run(curlExecutable(),['--fail','--silent','--max-time','5',info.origin+'/health'],{timeout:7000}));checks.publicHttps={ok:r.capabilities?.moecastGateway===1};}catch{checks.publicHttps={ok:false};}
- const report={checks,serviceReady:!!(checks.foreignPort.ok&&checks.gatewayOwned.ok&&checks.gatewayHealth.ok&&checks.runtimeIntegrity?.ok&&checks.nativeBinding?.ok&&checks.publicHttps?.ok&&checks.desktopRunning?.ok),autostart:false,supervisor:false,stateDirectory:base};if(emit)console.log(JSON.stringify(report,null,2));return report;
+ let installedVersion=null;try{installedVersion=(await json(path.join(base,'installation.json'))).version??null;}catch{}
+ const report={skillVersion:release.version,installedVersion,checks,serviceReady:!!(checks.foreignPort.ok&&checks.gatewayOwned.ok&&checks.gatewayHealth.ok&&checks.runtimeIntegrity?.ok&&checks.nativeBinding?.ok&&checks.publicHttps?.ok&&checks.desktopRunning?.ok),autostart:false,supervisor:false,stateDirectory:base};if(emit)console.log(JSON.stringify(report,null,2));return report;
 }
 async function service(cmd,extra=args){
  if(!await exists(path.join(runtime,'scripts/hapi-connect.mjs')))throw Error('INSTALL_REQUIRED');
