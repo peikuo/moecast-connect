@@ -1,6 +1,6 @@
 # Windows x64 candidate: installation and acceptance
 
-This branch adds native Windows plumbing. It does **not** establish that the installed Windows Codex build supports the existing queue and wake interfaces. Stop at a failed capability check and keep the same thread; do not substitute an executor. Record the commit, Windows / Codex / Node versions and the failed stage without credentials.
+This preview adds native Windows plumbing. Platform selection belongs to the Skill: detect it with `doctor`, and never ask users to choose the OS, CPU, branch or tunnel binary. It does **not** establish that the installed Windows Codex build supports the existing queue and wake interfaces. Stop at a failed capability check and keep the same thread; do not substitute an executor. Record the commit, Windows / Codex / Node versions and the failed stage without credentials.
 
 ## Phone compatibility prerequisite
 
@@ -9,7 +9,7 @@ The phone must use the Windows-host compatibility APK from this development hand
 ## First connection
 
 1. Open the installed Codex desktop App, sign in and open the existing **local Windows** chat you want as the phone entry. The agent must run in native PowerShell with Windows Node.js 22+ (`node -p "process.platform + '-' + process.arch"` must return `win32-x64`). Web/cloud/WSL chats are not this entry.
-2. Install this branch's `skills/moecast-codex-connect` Skill. Run its helper by absolute path: `node "C:\absolute\skill\scripts\connect.mjs" doctor`. Do not copy the example path literally.
+2. Install/update `skills/moecast-codex-connect` from the repository default branch; no platform-specific branch is required. Run its helper by absolute path: `node "C:\absolute\skill\scripts\connect.mjs" doctor`. Do not copy the example path literally.
 3. If missing, run `install`, then `doctor`. The installer checks a bundled, pinned Windows x64 tunnel and installs only gateway dependencies. Its state remains `%USERPROFILE%\.local\share\moecast-connect`; keep saved identity and pairing. `icacls` protects that installation for the current Windows user; the local administration pipe also requires its private capability. No administrator elevation, firewall change, URL-handler registration or startup task is added.
 4. Run `start --thread <the exact current desktop thread UUID>`. `CODEX_THREAD_ID` is acceptable when it is the trusted current chat ID. The installed desktop must be running. Pairing checks metadata and `thread/queue/list`; actual queue delivery and `codex://threads/wake/<id>` must still be tested on this Windows build.
 5. Wait for trusted HTTPS readiness, show the generated PNG QR code and scan with MoeCast. A QR expires after two minutes. Refresh for the **same thread** with `pair --thread <id>`; do not paste secrets into chat.
